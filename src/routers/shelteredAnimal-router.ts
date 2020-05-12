@@ -3,9 +3,9 @@ import * as animalService from '../services/animal-service';
 
 export const shelteredAnimalRouter = express.Router();
 
-shelteredAnimalRouter.get('/:shelteredAnimalID', (request, response, next) => {
-    const shelteredAnimalID = +request.params.id;
-    animalService.getAnimalByID(shelteredAnimalID).then(person => {
+shelteredAnimalRouter.get('/:shelterIDNumber', (request, response, next) => {
+    const shelterIDNumber = +request.params.id;
+    animalService.getAnimalByID(shelterIDNumber).then(person => {
         if (!person) {
             response.sendStatus(404);
         } else {

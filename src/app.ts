@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { shelteredAnimal } from './routers/shelteredAnimal';
-import { species } from './routers/species';
-import { employeeKeeper } from './routers/employeeKeeper';
+import { shelteredAnimalRouter } from './routers/shelteredAnimal-router';
+import { speciesRouter } from './routers/species-router';
+import { employeeKeeperRouter } from './routers/employeeKeeper-router';
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use((request, response, next) => {
     next();
 });
 
-app.use('/animals', shelteredAnimal);
+app.use('/animals', shelteredAnimalRouter);
 
 app.listen(port, () => {
     console.log(`App is listening at http://localhost:${port}`)

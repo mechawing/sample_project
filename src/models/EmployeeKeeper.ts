@@ -1,6 +1,6 @@
 export class EmployeeKeeper {
     name: string;
- 
+
     static from(object: Employee): EmployeeKeeper {
         const employee = new EmployeeKeeper (
             object.name

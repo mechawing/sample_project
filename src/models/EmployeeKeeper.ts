@@ -1,18 +1,20 @@
 export class EmployeeKeeper {
     employeeID: number;
-    name: string;
+    firstName: string;
+    lastName: string;
     position: string;
 
     static from(object: Employee): EmployeeKeeper {
         const employee = new EmployeeKeeper (
-            object.employeeID, object.name, object.position
+            object.employeeID, object.firstName, object.lastName, object.position
         );
         return employee;
     }
 
-    constructor(employeeID: number, name: string, position: string) {
+    constructor(employeeID: number, firstName: string, lastName: string, position: string) {
         this.employeeID = employeeID;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.position = position;
     }
 
@@ -20,6 +22,7 @@ export class EmployeeKeeper {
 
 export interface Employee { // Interface for an animal
     employeeID: number;
-    name: string;
+    firstName: string;
+    lastName: string;
     position: string;
 };

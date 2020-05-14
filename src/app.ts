@@ -16,6 +16,8 @@ app.use((request, response, next) => {
 });
 
 app.use('/animals', shelteredAnimalRouter);
+app.use('/employees', employeeKeeperRouter);
+app.use('/species', speciesRouter);
 
 app.listen(port, () => {
     console.log(`App is listening at http://localhost:${port}`)

@@ -18,3 +18,42 @@ employeeKeeperRouter.get('/:employeeID', (request, response, next) => { // Get E
         next();
     })
 });
+
+employeeKeeperRouter.get('', (request, response, next) => {
+    employeeService.getAllEmployees().then(employees => {
+        response.set('content-type', 'application/json');
+        response.json(employees);
+        next();
+    }).catch(err => {
+        response.sendStatus(500);
+    });
+});
+
+employeeKeeperRouter.post('', (request, response, next) => {
+        const employee = request.body;
+        employeeService.saveEmployee(employee)
+            .then(newEmployee => {
+                response.status(201);
+                response.json(newEmployee);
+                next();
+            }).catch(err => {
+                response.sendStatus(500);
+                next();
+            });
+});
+
+employeeKeeperRouter.patch('', (request, response, next) => {
+    const employee = request.body;
+    employeeService.patchEmployee(employee)
+        .then(updatedEmployee => {
+            if (updatedEmployee) {
+                response.json(updatedEmployee);
+            } else {
+                response.sendStatus(404);
+            }
+        }).catch(err => {
+            response.sendStatus(500);
+        }).finally(() => {
+            next();
+        })
+});

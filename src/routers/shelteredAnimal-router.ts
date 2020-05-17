@@ -41,3 +41,19 @@ shelteredAnimalRouter.post('', (request, response, next) => {
             next();
         });
 });
+
+shelteredAnimalRouter.patch('', (request, response, next) => {
+    const animal = request.body;
+    animalService.patchAnimal(animal)
+        .then(updatedAnimal => {
+            if (updatedAnimal) {
+                response.json(updatedAnimal);
+            } else {
+                response.sendStatus(404);
+            }
+        }).catch(err => {
+            response.sendStatus(500);
+        }).finally(() => {
+            next();
+        })
+});

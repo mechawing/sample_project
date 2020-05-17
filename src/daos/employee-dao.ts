@@ -28,16 +28,28 @@ export async function employeeExists(employeeID: number): Promise<boolean> { // 
 }
 
 export function saveEmployee(employee: EmployeeKeeper): Promise<EmployeeKeeper> {
-    const sql = `INSERT INTO employees (employeeID, firstName, lastName, position) \
-VALUES ($1, $2, $3, $4) RETURNING *`;
+    const sql = `INSERT INTO employees (firstName, lastName, position) \
+VALUES ($1, $2, $3) RETURNING *`;
 
     return db.query<Employee>(sql, [
-        employee.employeeID,
         employee.firstName,
         employee.lastName,
         employee.position
 
     ]).then(result => result.rows.map(row => EmployeeKeeper.from(row))[0]);
+}
+
+export function patchEmployee(employee: EmployeeKeeper): Promise<EmployeeKeeper> {
+
+    const sql = `UPDATE employees SET first_name = COALESCE($1, first_name), \
+last_name = COALESCE($2, last_name), position = COALESCE($3, position) \
+WHERE employeeID = $4 RETURNING *`;
+
+    const params = [employee.firstName, employee.lastName,
+                    employee.position, employee.employeeID];
+
+    return db.query<Employee>(sql, params)
+        .then(result => result.rows.map(row => EmployeeKeeper.from(row))[0]);
 }
 
 interface Exists {

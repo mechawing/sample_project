@@ -18,10 +18,22 @@ export function saveEmployee(employee: any): Promise<EmployeeKeeper> {
 
 
     if(employee.firstName && employee.lastName && employee.position) {
-        // Data is valid - Continue submitting to DAO
         return employeeDao.saveEmployee(newEmployee);
     } else {
-        // TODO: We should fail here, probably issue some kind of 400
         return new Promise((resolve, reject) => reject(422));
     }
+}
+
+export function patchEmployee(input: any): Promise<EmployeeKeeper> {
+
+    const employee = new EmployeeKeeper(
+        input.employeeID, input.firstName,
+        input.lastName, input.position
+    );
+
+    if (!employee.employeeID) {
+        throw new Error('400');
+    }
+
+    return employeeDao.patchEmployee(employee);
 }

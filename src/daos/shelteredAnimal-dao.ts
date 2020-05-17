@@ -29,11 +29,10 @@ export async function animalExists(shelterIDNumber: number): Promise<boolean> { 
 }
 
 export function saveAnimal(animal: ShelteredAnimal): Promise<ShelteredAnimal> {
-    const sql = `INSERT INTO animals (shelterIDNumber, name, species, sex, fixed, declawed, birthdate) \
+    const sql = `INSERT INTO animals (name, species, sex, fixed, declawed, birthdate) \
 VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
     return db.query<Animal>(sql, [
-        animal.shelterIDNumber,
         animal.name,
         animal.species,
         animal.sex,
@@ -43,6 +42,21 @@ VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
     ]).then(result => result.rows.map(row => ShelteredAnimal.from(row))[0]);
 }
 
+export function patchAnimal(animal: ShelteredAnimal): Promise<ShelteredAnimal> {
+
+    const sql = `UPDATE animals SET name = COALESCE($1, name), \
+species = COALESCE($2, species), sex = COALESCE($3, sex) \
+fixed = COALESCE($4, fixed), declawed = COALESCE($5, declawed) \
+birthdate = COALESCE($6, birthdate) WHERE shelterIDNumber = $7 RETURNING *`;
+
+    const birthdate = animal.birthdate && animal.birthdate.toISOString();
+
+    const params = [animal.name, animal.species, animal.sex, animal.fixed, animal.declawed,
+                    birthdate, animal.shelterIDNumber];
+
+    return db.query<Animal>(sql, params)
+        .then(result => result.rows.map(row => ShelteredAnimal.from(row))[0]);
+}
 
 interface Exists {
     exists: boolean;

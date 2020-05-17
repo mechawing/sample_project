@@ -22,3 +22,19 @@ export function saveAnimal(animal: any): Promise<ShelteredAnimal> {
         return new Promise((resolve, reject) => reject(422));
     }
 }
+
+export function patchAnimal(input: any): Promise<ShelteredAnimal> {
+
+    const birthdate = input.birthdate && new Date(input.birthdate);
+
+    const animal = new ShelteredAnimal(
+        input.shelterIDNumber, input.name, input.species, input.sex, input.fixed,
+        input.declawed, birthdate
+    );
+
+    if (!animal.shelterIDNumber) {
+        throw new Error('400');
+    }
+
+    return animalDao.patchAnimal(animal);
+}

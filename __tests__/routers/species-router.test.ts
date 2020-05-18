@@ -1,99 +1,88 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { shelteredAnimalRouter } from '../../src/routers/shelteredAnimal-router';
-import * as animalService from '../../src/services/animal-service';
+import { speciesRouter } from '../../src/routers/species-router';
+import * as speciesService from '../../src/services/species-service';
 import request from 'supertest';
 
-jest.mock('../../src/services/animal-service');
-const mockAnimalService = animalService as any;
+jest.mock('../../src/services/species-service');
+const mockSpeciesService = speciesService as any;
 
 const app = express();
 app.use(bodyParser.json())
-app.use('/animals', shelteredAnimalRouter);
+app.use('/species', speciesRouter);
 
-describe('GET /animals', () => {
+describe('GET /species', () => {
     test('Returns normally under normal circumstances', async () => {
-        mockAnimalService.getAllAnimals.mockImplementation(async () => []);
+        mockSpeciesService.getAllSpecies.mockImplementation(async () => []);
         await request(app)
-            .get('/animals')
+            .get('/species')
             .expect(200)
             .expect('content-type', 'application/json; charset=utf-8');
     });
     test('Returns normally under normal circumstances', async () => {
-        mockAnimalService.getAllAnimals.mockImplementation(async () => {throw new Error()});
+        mockSpeciesService.getAllSpecies.mockImplementation(async () => {throw new Error()});
         await request(app)
-            .get('/animals')
+            .get('/species')
             .expect(500);
     });
 });
 
-describe('POST /animals', () => {
+describe('POST /species', () => {
     test('Successful creation should return 201 status', async () => {
-        mockAnimalService.saveAnimal.mockImplementation(async () => ({}));
+        mockSpeciesService.saveSpecies.mockImplementation(async () => ({}));
         const payload = {
-            shelterIDNumber: 78,
-            name: 'Maggie',
-            species: 'dog',
-            sex: 'female',
-            fixed: true,
-            declawed: false,
-            birthdate: '2020-01-01'
+            name: 'cat'
         };
 
         await request(app)
-            .post('/animals')
+            .post('/species')
             .send(payload)
             .expect(201)
             .expect('content-type', 'application/json; charset=utf-8')
     });
 
     test('Should return 500 when encountering an error', async () => {
-        mockAnimalService.saveAnimal.mockImplementation(async () => {throw new Error()});
+        mockSpeciesService.saveSpecies.mockImplementation(async () => {throw new Error()});
 
         const payload = {
-            shelterIDNumber: 78,
-            name: 'Maggie',
-            species: 'dog',
-            sex: 'female',
-            fixed: true,
-            declawed: false,
-            birthdate: '2020-01-01'
-        };
+            speciesID: 2,
+            name: 'cat'
+        };
 
         await request(app)
-            .post('/animals')
+            .post('/species')
             .send(payload)
             .expect(500);
     });
 });
 
 
-describe('GET /animals/:shelterIDNumber', () => {
+describe('GET /species/:employeeID', () => {
     test('Normal behavior Json with status 200', async () => {
-        mockAnimalService.getAnimalByID
+        mockSpeciesService.getSpeciesByID
             .mockImplementation(async () => ({}));
 
         await request(app)
-            .get('/animals/1')
+            .get('/species/1')
             .expect(200)
             .expect('content-type', 'application/json; charset=utf-8')
     });
 
     test('No object found (404)', async() => {
-        mockAnimalService.getAnimalByID
+        mockSpeciesService.getSpeciesByID
             .mockImplementation(async () => (0));
 
         await request(app)
-            .get('/animals/blahblahblah')
+            .get('/species/blahblahblah')
             .expect(404);
     });
 
     test('500 internal server error', async() => {
-        mockAnimalService.getAnimalByID
+        mockSpeciesService.getSpeciesByID
             .mockImplementation(async () => {throw new Error()});
 
         await request(app)
-            .get('/animals/99')
+            .get('/species/99')
             .expect(500)
     })
 })

@@ -33,5 +33,5 @@ export interface Animal { // Interface for an animal
     sex: string;
     fixed: boolean;
     declawed: boolean; // While this procedure is done on cats most often, technically it can also be peformed on other animals as well.
-    birthdate: string;
+    birthdate: Date;
 };

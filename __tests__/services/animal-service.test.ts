@@ -15,7 +15,6 @@ describe('saveAnimal', () => {
 
     const payload = {
         shelterIDNumber: 78,
-        name: 'Maggie',
         species: 'dog',
         sex: 'female',
         fixed: true,
@@ -45,7 +44,6 @@ describe('saveAnimal', () => {
             sex: 'female',
             fixed: true,
             declawed: false,
-            birthdate: '2020-01-01'
         };
 
         try {
@@ -56,15 +54,14 @@ describe('saveAnimal', () => {
         }
     });
 
-    test('422 returned if no lastName provided', async () => {
+    test('422 returned if no name provided', async () => {
         expect.assertions(1);
-        mockAnimalDao.savePerson.mockImplementation(() => {
+        mockAnimalDao.saveAnimal.mockImplementation(() => {
             console.log('This is what mock dao actually calls');
         });
 
         const payload = {
             shelterIDNumber: 78,
-            name: 'Maggie',
             species: 'dog',
             sex: 'female',
             fixed: true,
@@ -80,8 +77,8 @@ describe('saveAnimal', () => {
         }
     });
 
-    test('Input object transformed to Person object', async () => {
-        mockAnimalDao.savePerson.mockImplementation(o => o);
+    test('Input object transformed to ShelteredAnimal object', async () => {
+        mockAnimalDao.saveAnimal.mockImplementation(o => o);
 
         const payload = {
             shelterIDNumber: 78,
@@ -166,7 +163,6 @@ describe('patchAnimal', () => {
             .mockImplementation(() => ({}));
 
         const payload = {
-            shelterIDNumber: 78,
             name: 'Maggie',
             species: 'dog',
             sex: 'female',

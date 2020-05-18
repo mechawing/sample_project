@@ -1,99 +1,92 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { shelteredAnimalRouter } from '../../src/routers/shelteredAnimal-router';
-import * as animalService from '../../src/services/animal-service';
+import { employeeKeeperRouter } from '../../src/routers/employeeKeeper-router';
+import * as employeeService from '../../src/services/employee-service';
 import request from 'supertest';
 
-jest.mock('../../src/services/animal-service');
-const mockAnimalService = animalService as any;
+jest.mock('../../src/services/employee-service');
+const mockEmployeeService = employeeService as any;
 
 const app = express();
 app.use(bodyParser.json())
-app.use('/animals', shelteredAnimalRouter);
+app.use('/employees', employeeKeeperRouter);
 
-describe('GET /animals', () => {
+describe('GET /employees', () => {
     test('Returns normally under normal circumstances', async () => {
-        mockAnimalService.getAllAnimals.mockImplementation(async () => []);
+        mockEmployeeService.getAllEmployees.mockImplementation(async () => []);
         await request(app)
-            .get('/animals')
+            .get('/employees')
             .expect(200)
             .expect('content-type', 'application/json; charset=utf-8');
     });
     test('Returns normally under normal circumstances', async () => {
-        mockAnimalService.getAllAnimals.mockImplementation(async () => {throw new Error()});
+        mockEmployeeService.getAllEmployees.mockImplementation(async () => {throw new Error()});
         await request(app)
-            .get('/animals')
+            .get('/employees')
             .expect(500);
     });
 });
 
-describe('POST /animals', () => {
+describe('POST /employees', () => {
     test('Successful creation should return 201 status', async () => {
-        mockAnimalService.saveAnimal.mockImplementation(async () => ({}));
+        mockEmployeeService.saveEmployee.mockImplementation(async () => ({}));
         const payload = {
-            shelterIDNumber: 78,
-            name: 'Maggie',
-            species: 'dog',
-            sex: 'female',
-            fixed: true,
-            declawed: false,
-            birthdate: '2020-01-01'
+            firstName: 'Jimmy',
+            lastName: 'Johnson',
+            position: 'Dog Keeper'
         };
 
         await request(app)
-            .post('/animals')
+            .post('/employees')
             .send(payload)
             .expect(201)
             .expect('content-type', 'application/json; charset=utf-8')
     });
 
     test('Should return 500 when encountering an error', async () => {
-        mockAnimalService.saveAnimal.mockImplementation(async () => {throw new Error()});
+        mockEmployeeService.saveEmployee.mockImplementation(async () => {throw new Error()});
 
         const payload = {
-            shelterIDNumber: 78,
-            name: 'Maggie',
-            species: 'dog',
-            sex: 'female',
-            fixed: true,
-            declawed: false,
-            birthdate: '2020-01-01'
-        };
+            employeeID: 1,
+            firstName: 'Jimmy',
+            lastName: 'Johnson',
+            position: 'Dog Keeper'
+        };
 
         await request(app)
-            .post('/animals')
+            .post('/employees')
             .send(payload)
             .expect(500);
     });
 });
 
 
-describe('GET /animals/:shelterIDNumber', () => {
+describe('GET /employees/:employeeID', () => {
     test('Normal behavior Json with status 200', async () => {
-        mockAnimalService.getAnimalByID
+        mockEmployeeService.getEmployeeByID
             .mockImplementation(async () => ({}));
 
         await request(app)
-            .get('/animals/1')
+            .get('/employees/1')
             .expect(200)
             .expect('content-type', 'application/json; charset=utf-8')
     });
 
     test('No object found (404)', async() => {
-        mockAnimalService.getAnimalByID
+        mockEmployeeService.getEmployeeByID
             .mockImplementation(async () => (0));
 
         await request(app)
-            .get('/animals/blahblahblah')
+            .get('/employees/blahblahblah')
             .expect(404);
     });
 
     test('500 internal server error', async() => {
-        mockAnimalService.getAnimalByID
+        mockEmployeeService.getEmployeeByID
             .mockImplementation(async () => {throw new Error()});
 
         await request(app)
-            .get('/animals/99')
+            .get('/employees/99')
             .expect(500)
     })
 })

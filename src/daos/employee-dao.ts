@@ -41,8 +41,8 @@ VALUES ($1, $2, $3) RETURNING *`;
 
 export function patchEmployee(employee: EmployeeKeeper): Promise<EmployeeKeeper> {
 
-    const sql = `UPDATE employees SET first_name = COALESCE($1, first_name), \
-last_name = COALESCE($2, last_name), position = COALESCE($3, position) \
+    const sql = `UPDATE employees SET firstName = COALESCE($1, firstName), \
+lastName = COALESCE($2, lastName), position = COALESCE($3, position) \
 WHERE employeeID = $4 RETURNING *`;
 
     const params = [employee.firstName, employee.lastName,

@@ -4,7 +4,7 @@ import * as employeeService from '../services/employee-service';
 export const employeeKeeperRouter = express.Router();
 
 employeeKeeperRouter.get('/:employeeID', (request, response, next) => { // Get Employees by ID
-    const employeeID = +request.params.id;
+    const employeeID = +request.params.employeeID;
     employeeService.getEmployeeByID(employeeID).then(employee => {
         if (!employee) {
             response.sendStatus(404);

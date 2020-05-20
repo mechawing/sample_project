@@ -15,9 +15,9 @@ export function saveSpecies(species: any): Promise<Species> {
         undefined, species.name
     );
 
-    if(species.name) {
+     if(species.name) {
         return speciesDao.saveSpecies(newSpecies);
-    } else {
+     } else {
         return new Promise((resolve, reject) => reject(422));
     }
 }

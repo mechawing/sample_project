@@ -3,20 +3,18 @@ export class Species {
     name: string;
 
     static from(object: SpeciesRow): Species {
-        const species = new Species (
-            object.speciesID, object.name,
-        );
-        return species;
+        const speciesRow = new Species ( object.species_id, object.name);
+        return speciesRow;
     }
 
     constructor(speciesID: number, name: string) {
-        this.name = name;
         this.speciesID = speciesID;
+        this.name = name;
     }
 
 };
 
 export interface SpeciesRow { // Interface for an animal
-    speciesID: number;
+    species_id: number;
     name: string;
 };

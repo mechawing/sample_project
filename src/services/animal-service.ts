@@ -19,6 +19,7 @@ export function saveAnimal(animal: any): Promise<ShelteredAnimal> {
     if(animal.name && animal.birthdate) {
         return animalDao.saveAnimal(newAnimal);
     } else {
+        console.warn('Animal invalid');
         return new Promise((resolve, reject) => reject(422));
     }
 }

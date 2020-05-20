@@ -27,6 +27,31 @@ describe('GET /species', () => {
     });
 });
 
+describe('GET /species/:speciesID', () => {
+    test('Normal behavior Json with status 200', async () => {
+        mockSpeciesService.getSpeciesByID.mockImplementation(async () => ({}));
+        await request(app)
+        .get('/species/1')
+        .expect(200)
+        .expect('content-type', 'application/json; charset=utf-8')
+    });
+
+    test('No object found (404)', async() => {
+        mockSpeciesService.getSpeciesByID.mockImplementation(async () => (0))
+        await request(app)
+        .get('/species/adasfasa')
+        .expect(404);
+        // no need for expect for content type
+    });
+
+    test('500 internal server error', async() => {
+        mockSpeciesService.getSpeciesByID.mockImplementation(async () => {throw new Error()});
+        await request(app)
+        .get('/species/')
+        .expect(500)
+    });
+})
+
 describe('POST /species', () => {
     test('Successful creation should return 201 status', async () => {
         mockSpeciesService.saveSpecies.mockImplementation(async () => ({}));
@@ -57,7 +82,7 @@ describe('POST /species', () => {
 });
 
 
-describe('GET /species/:employeeID', () => {
+describe('GET /species/:speciesID', () => {
     test('Normal behavior Json with status 200', async () => {
         mockSpeciesService.getSpeciesByID
             .mockImplementation(async () => ({}));

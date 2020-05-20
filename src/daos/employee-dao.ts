@@ -2,7 +2,7 @@ import { db } from './db';
 import { EmployeeKeeper, Employee } from '../models/EmployeeKeeper';
 
 export function getEmployeeByID(employeeID: number): Promise<EmployeeKeeper> {
-    const sql = 'SELECT * FROM employees WHERE employeeID = $1';
+    const sql = 'SELECT * FROM employees WHERE employee_ID = $1';
 
     return db.query<Employee>(sql, [employeeID])
         .then(result => result.rows.map(row => EmployeeKeeper.from(row))[0]);
@@ -28,7 +28,7 @@ export async function employeeExists(employeeID: number): Promise<boolean> { // 
 }
 
 export function saveEmployee(employee: EmployeeKeeper): Promise<EmployeeKeeper> {
-    const sql = `INSERT INTO employees (firstName, lastName, position) \
+    const sql = `INSERT INTO employees (first_name, last_name, position) \
 VALUES ($1, $2, $3) RETURNING *`;
 
     return db.query<Employee>(sql, [
@@ -41,8 +41,8 @@ VALUES ($1, $2, $3) RETURNING *`;
 
 export function patchEmployee(employee: EmployeeKeeper): Promise<EmployeeKeeper> {
 
-    const sql = `UPDATE employees SET firstName = COALESCE($1, firstName), \
-lastName = COALESCE($2, lastName), position = COALESCE($3, position) \
+    const sql = `UPDATE employees SET first_name = COALESCE($1, first_name), \
+last_name = COALESCE($2, last_name), position = COALESCE($3, position) \
 WHERE employeeID = $4 RETURNING *`;
 
     const params = [employee.firstName, employee.lastName,

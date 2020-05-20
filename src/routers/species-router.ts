@@ -1,10 +1,11 @@
 import express from 'express';
 import * as speciesService from '../services/species-service';
+import { Species } from '../models/Species';
 
 export const speciesRouter = express.Router();
 
 speciesRouter.get('/:speciesID', (request, response, next) => {
-    const speciesID = +request.params.id;
+    const speciesID = +request.params.speciesID;
     speciesService.getSpeciesByID(speciesID).then(species => {
         if (!species) {
             response.sendStatus(404);
@@ -23,7 +24,7 @@ speciesRouter.get('', (request, response, next) => {
     speciesService.getAllSpecies().then(species => {
         response.set('content-type', 'application/json');
         response.json(species);
-        next();
+       next();
     }).catch(err => {
         response.sendStatus(500);
     });
@@ -39,7 +40,7 @@ speciesRouter.post('', (request, response, next) => {
                 next();
             }).catch(err => {
                 response.sendStatus(500);
-                next();
+                 next();
             });
 });
 

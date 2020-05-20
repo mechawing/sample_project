@@ -6,7 +6,7 @@ export class EmployeeKeeper {
 
     static from(object: Employee): EmployeeKeeper {
         const employee = new EmployeeKeeper (
-            object.employeeID, object.firstName, object.lastName, object.position
+            object.employee_id, object.first_name, object.last_name, object.position
         );
         return employee;
     }
@@ -21,8 +21,8 @@ export class EmployeeKeeper {
 };
 
 export interface Employee { // Interface for an animal
-    employeeID: number;
-    firstName: string;
-    lastName: string;
+    employee_id: number;
+    first_name: string;
+    last_name: string;
     position: string;
 };

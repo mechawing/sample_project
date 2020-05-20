@@ -1,5 +1,10 @@
 {
   "name": "jackson_hopkins_p0",
+  "jest": {
+    "testPathIgnorePatterns": [
+      "species-dao.ts"
+    ]
+  },
   "version": "1.0.0",
   "description": "Jackson's Animal Shelter!",
   "main": "index.js",
